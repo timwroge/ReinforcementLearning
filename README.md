@@ -5,10 +5,13 @@ This reposisory is designed to provide an introduction to reinforcement learning
 
 Projects 
 ---------------------
-These are the projects I aim to replicate
-<a href='https://github.com/devsisters/DQN-tensorflow'>Deep Q Learning</a>
-  <a href='https://github.com/nikhilmetrani/rl-ml'>Basic Q Learning</a>
-<a href='https://github.com/suragnair/alpha-zero-general'>Alpha Go Zero</a>
+These are the projects I aim to replicate:
+
+*<a href='https://github.com/devsisters/DQN-tensorflow'>Deep Q Learning</a>
+
+ * <a href='https://github.com/nikhilmetrani/rl-ml'>Basic Q Learning</a>
+  
+*<a href='https://github.com/suragnair/alpha-zero-general'>Alpha Go Zero</a>
 
 
 Workflow
