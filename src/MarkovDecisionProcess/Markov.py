@@ -3,11 +3,8 @@ import numpy
 import gym
 
 #make gym environment
-
+environment=gym.make("CartPole-v0"  )
 #create policy matrix
-
+states=environment.
 #optimize with cross entropy
 
-#run
-if __name__ == '__main__' :
-    run()
