@@ -57,10 +57,11 @@ class QLearningAgent:
             return 0.0
 
         #iterate through array and find the max Q over all actions
-        states=self._qvalues[state]
-        value = max(states)
+        else:
+            states=self._qvalues[state]
+            value = max(states)
 
-        return value
+            return value
 
     def update(self, state, action, reward, next_state):
         """
@@ -72,7 +73,7 @@ class QLearningAgent:
         gamma = self.discount
         learning_rate = self.alpha
 
-        q_val= (1-learning_rate)*(self.get_qvalue(state, action) )+ learning_rate*(reward+gamma*value(next_state) )
+        q_val= (1-learning_rate)*(self.get_qvalue(state, action) )+ learning_rate*(reward+gamma*self.get_value(next_state) )
         self.set_qvalue(state, action, q_val)
 
 
@@ -86,8 +87,8 @@ class QLearningAgent:
         if len(possible_actions) == 0:
             return None
 
-        for i in range(possible_actions):
-            action = possible_actions(i)
+        for i in range(len( possible_actions)):
+            action = possible_actions[i]
             if i ==0:
                 max_q=self.get_qvalue(state, action)
                 best_action=action
@@ -122,5 +123,5 @@ class QLearningAgent:
         if epsilon > random.random():
             chosen_action=random.choice(possible_actions)
         else:
-            chosen_action=get_best_action(state)
+            chosen_action=self.get_best_action(state)
         return chosen_action
