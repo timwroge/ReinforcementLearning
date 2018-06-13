@@ -1,8 +1,6 @@
-#XVFB will be launched if you run on a server
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
 from collections import defaultdict
 import random, math
 import numpy as np
@@ -58,7 +56,9 @@ class QLearningAgent:
         if len(possible_actions) == 0:
             return 0.0
 
-        <YOUR CODE HERE>
+        #iterate through array and find the max Q over all actions
+        states=self._qvalues[state]
+        value = max(states)
 
         return value
 
@@ -72,9 +72,8 @@ class QLearningAgent:
         gamma = self.discount
         learning_rate = self.alpha
 
-        <YOUR CODE HERE>
-
-        self.set_qvalue(state, action, <YOUR_QVALUE>)
+        q_val= (1-learning_rate)*(self.get_qvalue(state, action) )+ learning_rate*(reward+gamma*value(next_state) )
+        self.set_qvalue(state, action, q_val)
 
 
     def get_best_action(self, state):
@@ -87,8 +86,15 @@ class QLearningAgent:
         if len(possible_actions) == 0:
             return None
 
-        <YOUR CODE HERE>
-
+        for i in range(possible_actions):
+            action = possible_actions(i)
+            if i ==0:
+                max_q=self.get_qvalue(state, action)
+                best_action=action
+            else:
+                if self.get_qvalue(state, action) > max_q:
+                    max_q=self.get_qvalue(state, action)
+                    best_action=action
         return best_action
 
     def get_action(self, state):
@@ -113,6 +119,8 @@ class QLearningAgent:
         #agent parameters:
         epsilon = self.epsilon
 
-        <YOUR CODE HERE>
-
+        if epsilon > random.random():
+            chosen_action=random.choice(possible_actions)
+        else:
+            chosen_action=get_best_action(state)
         return chosen_action
