@@ -1,4 +1,6 @@
 import gym
+import numpy as np
+import matplotlib.pyplot as plt
 env = gym.make("Taxi-v2")
 print("Creating environment space" )
 n_actions = env.action_space.n
@@ -39,7 +41,6 @@ for i in range(1000):
     agent.epsilon *= 0.99
 
     if i %100 ==0:
-        clear_output(True)
         print('eps =', agent.epsilon, 'mean reward =', np.mean(rewards[-10:]))
         plt.plot(rewards)
         plt.show()

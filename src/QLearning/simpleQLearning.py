@@ -36,14 +36,18 @@ class QLearningAgent:
 
     def get_qvalue(self, state, action):
         """ Returns Q(state,action) """
+
         return self._qvalues[state][action]
+
 
     def set_qvalue(self,state,action,value):
         """ Sets the Qvalue for [state,action] to the given value """
         self._qvalues[state][action] = value
 
     #---------------------START OF YOUR CODE---------------------#
-
+    def _get_max_index(array) :
+        if len(array)>0:
+            return(array.index(max(array)) )
     def get_value(self, state):
         """
         Compute your agent's estimate of V(s) using current q-values
@@ -55,13 +59,11 @@ class QLearningAgent:
         #If there are no legal actions, return 0.0
         if len(possible_actions) == 0:
             return 0.0
-
-        #iterate through array and find the max Q over all actions
         else:
-            states=self._qvalues[state]
-            value = max(states)
-
-            return value
+            qvals=[]
+            for action in possible_actions:
+                qvals.append(self.get_qvalue(state, action) )
+            return max(qvals)
 
     def update(self, state, action, reward, next_state):
         """

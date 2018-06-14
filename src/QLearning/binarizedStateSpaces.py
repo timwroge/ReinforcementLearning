@@ -1,3 +1,6 @@
+import gym
+import matplotlib.pyplot as plt
+import numpy as np
 env = gym.make("CartPole-v0")
 n_actions = env.action_space.n
 
@@ -21,7 +24,8 @@ from gym.core import ObservationWrapper
 class Binarizer(ObservationWrapper):
 
     def _observation(self, state):
-
+        print(state)
+        input()
         #state = <round state to some amount digits.>
         #hint: you can do that with round(x,n_digits)
         #you will need to pick a different n_digits for each dimension
