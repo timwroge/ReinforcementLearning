@@ -58,7 +58,7 @@ class ReplayBuffer(object):
             done_mask[i] = 1 if executing act_batch[i] resulted in
             the end of an episode and 0 otherwise.
         """
-        idxes = np.random.permutation(self._maxsize() ) #<randomly generate batch_size integers to be used as indexes of samples>
+        idxes = np.random.permutation(self._maxsize ) #<randomly generate batch_size integers to be used as indexes of samples>
         randBatch=self._storage[idxes]
         states=[]
         actions=[]
