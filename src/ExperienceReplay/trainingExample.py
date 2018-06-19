@@ -21,6 +21,9 @@ class ReplayBuffer(object):
               However you may find out there are faster and/or more memory-efficient ways to do so.
         """
         self._storage =deque([],size )
+        #initialize the storage as all nones
+        for _ in range( size):
+            self._storage.appendleft(None)
         self._maxsize = size
 
         # OPTIONAL: YOUR CODE
@@ -59,7 +62,11 @@ class ReplayBuffer(object):
             the end of an episode and 0 otherwise.
         """
         idxes = np.random.permutation(self._maxsize ) #<randomly generate batch_size integers to be used as indexes of samples>
-        randBatch=self._storage[idxes]
+
+        randBatch=[]
+        for index in idxes:
+            randBatch.append(self._storage[index] )
+
         states=[]
         actions=[]
         rewards=[]
@@ -68,11 +75,12 @@ class ReplayBuffer(object):
 
         # collect <s,a,r,s',done> for each index
         for tuple_vals in randBatch:
-            states.append(tuple_vals[0])
-            actions.append(tuple_vals[1] )
-            rewards.append(tuple_vals[2] )
-            next_states.append(tuple_vals[3] )
-            is_done.append(tuple_vals[4] )
+            if tuple_vals != None:
+                states.append(tuple_vals[0])
+                actions.append(tuple_vals[1] )
+                rewards.append(tuple_vals[2] )
+                next_states.append(tuple_vals[3] )
+                is_done.append(tuple_vals[4] )
 
 
         return np.array(states), np.array(actions), np.array(rewards), np.array(next_states), np.array(is_done)
@@ -141,7 +149,6 @@ agent_replay = QLearningAgent(alpha=0.5, epsilon=0.25, discount=0.99,
 
 replay = ReplayBuffer(1000)
 
-from IPython.display import clear_output
 from pandas import ewma, Series
 moving_average = lambda ts, span=100: ewma(Series(ts), min_periods=span//10, span=span).values
 
@@ -155,7 +162,6 @@ for i in range(1000):
     agent_baseline.epsilon *= 0.99
 
     if i %100 ==0:
-        clear_output(True)
         print('Baseline : eps =', agent_replay.epsilon, 'mean reward =', np.mean(rewards_baseline[-10:]))
         print('ExpReplay: eps =', agent_baseline.epsilon, 'mean reward =', np.mean(rewards_replay[-10:]))
         plt.plot(moving_average(rewards_replay), label='exp. replay')
