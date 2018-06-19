@@ -133,7 +133,8 @@ def play_and_train_with_replay(env, agent, replay=None,
 
             # sample replay_batch_size random transitions from replay,
             # then update agent on each of them in a loop
-            replay.add((s,a,r,next_s, done) )
+            #obs_t, action, reward, obs_tp1, done)
+            replay.add(s,a,r,next_s, done)
         s = next_s
         total_reward +=r
         if done:break
