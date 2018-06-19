@@ -148,20 +148,24 @@ agent_baseline = QLearningAgent(alpha=0.5, epsilon=0.25, discount=0.99,
 agent_replay = QLearningAgent(alpha=0.5, epsilon=0.25, discount=0.99,
                        get_legal_actions = lambda s: range(n_actions))
 
-replay = ReplayBuffer(1000)
+replay = ReplayBuffer(10000)
 
 from pandas import ewma, Series
 moving_average = lambda ts, span=100: ewma(Series(ts), min_periods=span//10, span=span).values
 
 rewards_replay, rewards_baseline = [], []
+#record every  episode with replay
+env = gym.wrappers.Monitor(env, 'videos', video_callable=lambda episode_id: episode_id%400==0, force=True)
 
-for i in range(1000):
+    
+for i in range(10000):
     rewards_replay.append(play_and_train_with_replay(env, agent_replay, replay))
     rewards_baseline.append(play_and_train_with_replay(env, agent_baseline, replay=None))
 
+    
     agent_replay.epsilon *= 0.99
     agent_baseline.epsilon *= 0.99
-
+    env.render()
     if i %100 ==0:
         print('Baseline : eps =', agent_replay.epsilon, 'mean reward =', np.mean(rewards_baseline[-10:]))
         print('ExpReplay: eps =', agent_baseline.epsilon, 'mean reward =', np.mean(rewards_replay[-10:]))
