@@ -104,7 +104,7 @@ print ("Success!")
 
 import gym
 
-env = gym.make("Taxi-v2")
+env = gym.make("CartPole-v1")
 n_actions = env.action_space.n
 
 def play_and_train_with_replay(env, agent, replay=None,
@@ -149,6 +149,7 @@ agent_replay = QLearningAgent(alpha=0.5, epsilon=0.25, discount=0.99,
 
 replay = ReplayBuffer(1000)
 
+import pandas
 from pandas import ewma, Series
 moving_average = lambda ts, span=100: ewma(Series(ts), min_periods=span//10, span=span).values
 
