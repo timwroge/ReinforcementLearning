@@ -19,9 +19,14 @@ keras.backend.set_session(sess)
 
 network = keras.models.Sequential()
 network.add(L.InputLayer(state_dim))
-
+hidden_1=30
+hidden_2=15
 # let's create a network for approximate q-learning following guidelines above
-<YOUR CODE: stack more layers!!!1 >
+network.add(L.Dense(hidden_1))
+network.add(L.Dense(hidden_2))
+#insert final layer
+network.add(L.Dense(n_actions, activation='linear'))
+
 
 def get_action(state, epsilon=0):
     """
@@ -30,13 +35,18 @@ def get_action(state, epsilon=0):
     """
 
     q_values = network.predict(state[None])[0]
+    random_num=np.random.rand()
 
-    ###YOUR CODE
 
-    return <epsilon-greedily selected action>
+    if random_num < epsilon:
+        action=env.action_space.sample()
+    else:
+        action= np.argmax( q_values, axis=0)
+    return action
+
 assert network.output_shape == (None, n_actions), "please make sure your model maps state s -> [Q(s,a0), ..., Q(s, a_last)]"
 assert network.layers[-1].activation == keras.activations.linear, "please make sure you predict q-values without nonlinearity"
-
+print('Passed Network Tests ' )
 # test epsilon-greedy exploration
 s = env.reset()
 assert np.shape(get_action(s)) == (), "please return just one action (integer)"
@@ -49,11 +59,11 @@ for eps in [0., 0.1, 0.5, 1.0]:
             assert abs(state_frequencies[other_action] - 10000 * (eps / n_actions)) < 200
     print('e=%.1f tests passed'%eps)
 
-[200~states_ph = tf.placeholder('  float32''  , shape=(None,) + state_dim)
-actions_ph = tf.placeholder('  int32''  , shape=[None])
-rewards_ph = tf.placeholder('  float32''  , shape=[None])
-next_states_ph = tf.placeholder('  float32''  , shape=(None,) + state_dim)
-is_done_ph = tf.placeholder('  bool''  , shape=[None])] ' ) ) ' ) ] ' ) ] ' ) ) ' ) ]
+states_ph = tf.placeholder('float32'  , shape=(None,) + state_dim)
+actions_ph = tf.placeholder('int32'  , shape=[None])
+rewards_ph = tf.placeholder('float32'  , shape=[None])
+next_states_ph = tf.placeholder('float32'  , shape=(None,) + state_dim)
+is_done_ph = tf.placeholder('bool'  , shape=[None])
 
 predicted_qvalues = network(states_ph)
 
@@ -63,17 +73,20 @@ predicted_qvalues_for_actions = tf.reduce_sum(predicted_qvalues * tf.one_hot(act
 
 gamma = 0.99
 
+predicted_next_qvalues = network(next_states_ph)
 # compute q-values for all actions in next states
-predicted_next_qvalues = <YOUR CODE - apply network to get q-values for next_states_ph>
+predicted_qvalues_for_actions =tf.reduce_sum(predicted_next_qvalues * tf.one_hot(actions_ph, n_actions), axis=1)
 
 # compute V*(next_states) using predicted next q-values
-next_state_values = <YOUR CODE>
+#return max q_val over actions
+next_state_values = tf.reduce_max(predicted_next_qvalues, axis=0)
+
 
 # compute "target q-values" for loss - it's what's inside square parentheses in the above formula.
-target_qvalues_for_actions = <YOUR CODE>
+target_qvalues_for_actions =5 #change
 
 # at the last state we shall use simplified formula: Q(s,a) = r(s,a) since s' doesn't exist
-target_qvalues_for_actions = tf.where(is_done_ph, rewards_ph, target_qvalues_for_actions)
+#target_qvalues_for_actions = tf.where(is_done_ph, rewards_ph, target_qvalues_for_actions)
 
 #mean squared error loss to minimize
 loss = (predicted_qvalues_for_actions - tf.stop_gradient(target_qvalues_for_actions)) ** 2
