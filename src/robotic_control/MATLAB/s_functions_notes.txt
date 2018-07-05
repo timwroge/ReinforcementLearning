@@ -1,0 +1,15 @@
+use the initial function provided by matlab
+You can modify it as much or as little as you want
+
+	DoPostPropSetup(block)
+		define the work areas and state variables (the memory of the code)
+		to initialize states:
+	InitializeConditions(block)
+		declare initial condition
+	Outputs(block)
+		this will give ports and output of the block
+	SetInpPortFrameData(block, idx, fd)
+		change this to control for mulitple inputs
+	Terminate(block)
+		This will run when the simulation is over
+
