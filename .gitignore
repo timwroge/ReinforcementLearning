@@ -3,3 +3,4 @@ src/theory/robotics/env
 *.json
 *.pyc
 *.mp4
+*.p
