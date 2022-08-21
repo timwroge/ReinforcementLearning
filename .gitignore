@@ -1,2 +1,5 @@
 src/theory/robotics/env
 /rl/*
+*.json
+*.pyc
+*.mp4
